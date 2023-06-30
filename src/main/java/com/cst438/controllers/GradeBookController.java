@@ -2,6 +2,9 @@ package com.cst438.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -169,5 +172,34 @@ public class GradeBookController {
 		
 		return assignment;
 	}
-
+	
+	@PostMapping("/course/{course_id}/assignments")
+	@Transactional
+	public void addAssignment(@PathVariable("course_id") int courseId, @RequestBody AssignmentListDTO.AssignmentDTO assignmentDTO) {
+	    // Check if the course exists
+	    Course course = courseRepository.findById(courseId).orElse(null);
+	    if (course == null) {
+	        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found.");
+	    }
+	    
+	 // Create a new assignment
+	    Assignment assignment = new Assignment();
+	    assignment.setName(assignmentDTO.assignmentName);
+	    
+	    // Convert the dueDate to a java.sql.Date object
+	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	    Date dueDate;
+	    try {
+	        dueDate = dateFormat.parse(assignmentDTO.dueDate);
+	        java.sql.Date sqlDueDate = new java.sql.Date(dueDate.getTime());
+	        assignment.setDueDate(sqlDueDate);
+	    } catch (ParseException e) {
+	        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid due date format.");
+	    }
+	    
+	    assignment.setCourse(course);
+	    
+	    // Save the assignment in the database
+	    assignmentRepository.save(assignment); 
+	}
 }
