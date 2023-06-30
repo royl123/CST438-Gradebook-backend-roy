@@ -2,6 +2,7 @@ package com.cst438.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -201,5 +202,33 @@ public class GradeBookController {
 	    
 	    // Save the assignment in the database
 	    assignmentRepository.save(assignment); 
+	}
+	
+	@PutMapping("/course/{course_id}/assignments/{assignment_id}")
+	@Transactional
+	public void updateAssignmentName(
+	    @PathVariable("course_id") int courseId,
+	    @PathVariable("assignment_id") int assignmentId,
+	    @RequestBody Map<String, Object> payload
+	) {
+	    // Check if the course exists
+	    Course course = courseRepository.findById(courseId).orElse(null);
+	    if (course == null) {
+	        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found.");
+	    }
+	    
+	    // Check if the assignment exists
+	    Assignment assignment = assignmentRepository.findById(assignmentId).orElse(null);
+	    if (assignment == null) {
+	        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Assignment not found.");
+	    }
+	    
+	    String newName = (String) payload.get("assignmentName");
+	    
+	    // Update the assignment name
+	    assignment.setName(newName);
+	    
+	    // Save the updated assignment in the database
+	    assignmentRepository.save(assignment);
 	}
 }
