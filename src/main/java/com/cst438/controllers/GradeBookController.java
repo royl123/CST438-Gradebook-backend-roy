@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -230,5 +231,32 @@ public class GradeBookController {
 	    
 	    // Save the updated assignment in the database
 	    assignmentRepository.save(assignment);
+	}
+	
+	@DeleteMapping("/course/{course_id}/assignments/{assignment_id}")
+	@Transactional
+	public void deleteAssignment(
+	    @PathVariable("course_id") int courseId,
+	    @PathVariable("assignment_id") int assignmentId
+	) {
+	    // Check if the course exists
+	    Course course = courseRepository.findById(courseId).orElse(null);
+	    if (course == null) {
+	        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found.");
+	    }
+	    
+	    // Check if the assignment exists
+	    Assignment assignment = assignmentRepository.findById(assignmentId).orElse(null);
+	    if (assignment == null) {
+	        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Assignment not found.");
+	    }
+	    
+	    // Check if there are any grades for the assignment
+	    boolean hasGrades = assignmentGradeRepository.existsByAssignment(assignment);
+	    if (hasGrades) {
+	        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot delete assignment with existing grades.");
+	    }
+	    
+	    assignmentRepository.delete(assignment);
 	}
 }
