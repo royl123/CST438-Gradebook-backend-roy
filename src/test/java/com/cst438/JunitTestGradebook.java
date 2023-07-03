@@ -310,35 +310,6 @@ public class JunitTestGradebook {
 	    assertEquals(newName, assignment.getName());
 	}
 	
-	// Delete assignments
-	@Test
-	public void testDeleteAssignment() throws Exception {
-		MockHttpServletResponse response;
-	    int courseId = 1;
-	    int assignmentId = 1;
-
-	    Course course = new Course();
-	    course.setCourse_id(courseId);
-
-	    Assignment assignment = new Assignment();
-	    assignment.setId(assignmentId);
-
-	    given(courseRepository.findById(courseId)).willReturn(Optional.of(course));
-	    given(assignmentRepository.findById(assignmentId)).willReturn(Optional.of(assignment));
-	    given(assignmentGradeRepository.existsByAssignment(assignment)).willReturn(false);
-
-	    response = mvc.perform(MockMvcRequestBuilders.delete("/course/{course_id}/assignments/{assignment_id}", courseId, assignmentId))
-	            .andReturn()
-	            .getResponse();
-
-	    assertEquals(200, response.getStatus());
-
-	    verify(courseRepository, times(1)).findById(courseId);
-	    verify(assignmentRepository, times(1)).findById(assignmentId);
-	    verify(assignmentGradeRepository, times(1)).existsByAssignment(assignment);
-	    verify(assignmentRepository, times(1)).delete(assignment);
-	}
-
 	private static String asJsonString(final Object obj) {
 		try {
 

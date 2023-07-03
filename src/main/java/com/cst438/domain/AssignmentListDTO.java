@@ -14,8 +14,7 @@ public class AssignmentListDTO {
 		public String courseTitle;
 		public int courseId;
 		
-		public AssignmentDTO() {
-	    }
+		public AssignmentDTO() {}
 
 		public AssignmentDTO(int assignmentId, int courseId, String assignmentName, String dueDate,
 				String courseTitle) {
