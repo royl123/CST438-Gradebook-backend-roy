@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.Map;
 
 @RestController
+@CrossOrigin(origins = {"http://localhost:3000","http://localhost:3001"})
 public class AssignmentController {
 
 	private final CourseRepository courseRepository;
@@ -40,10 +41,14 @@ public class AssignmentController {
 		if (course == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found.");
 		}
-
+		
 		// Create a new assignment
 		Assignment assignment = new Assignment();
 		assignment.setName(assignmentDTO.assignmentName);
+		
+		//set 1 (true) by default
+		assignment.setNeedsGrading(1);
+		
 
 		// Convert the dueDate to a java.sql.Date object
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
