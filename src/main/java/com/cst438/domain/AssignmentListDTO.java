@@ -13,13 +13,15 @@ public class AssignmentListDTO {
 		public String dueDate;
 		public String courseTitle;
 		public int courseId;
+		public int needsGrading;
 		
 		public AssignmentDTO() {}
 
-		public AssignmentDTO(int assignmentId, int courseId, String assignmentName, String dueDate,
+		public AssignmentDTO(int assignmentId, int courseId, int needsGrading, String assignmentName, String dueDate,
 				String courseTitle) {
 			this.assignmentId = assignmentId;
 			this.courseId = courseId;
+			this.needsGrading = needsGrading;
 			this.assignmentName = assignmentName;
 			this.dueDate = dueDate;
 			this.courseTitle = courseTitle;
@@ -28,7 +30,7 @@ public class AssignmentListDTO {
 		@Override
 		public String toString() {
 			return "[assignmentId=" + assignmentId + ", assignmentName=" + assignmentName + ", dueDate="
-					+ dueDate + ", courseTitle=" + courseTitle + ", courseId=" + courseId + "]";
+					+ dueDate + ", courseTitle=" + courseTitle + ", courseId=" + courseId + ", needsGrading=" + needsGrading + "]";
 		}
 
 
