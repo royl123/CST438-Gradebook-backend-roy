@@ -31,10 +31,24 @@ public class EnrollmentController {
 	@Transactional
 	public EnrollmentDTO addEnrollment(@RequestBody EnrollmentDTO enrollmentDTO) {
 		
-		//TODO  complete this method in homework 4
-		
-		return null;
-		
+		int courseId = enrollmentDTO.course_id;
+        String studentEmail = enrollmentDTO.studentEmail;
+
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found."));
+
+        if (enrollmentRepository.existsByCourseAndStudent(course, studentEmail)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Student is already enrolled in the course.");
+        }
+
+        // Create a new enrollment
+        Enrollment enrollment = new Enrollment();
+        enrollment.setCourse(course);
+        enrollment.setStudentEmail(studentEmail);
+
+        enrollmentRepository.save(enrollment);
+
+        return enrollmentDTO;
 	}
 
 }
