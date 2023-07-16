@@ -37,7 +37,7 @@ public class EnrollmentController {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found."));
 
-        if (enrollmentRepository.existsByCourseAndStudent(course, studentEmail)) {
+        if (enrollmentRepository.existsByCourseAndStudentEmail(course, studentEmail)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Student is already enrolled in the course.");
         }
 

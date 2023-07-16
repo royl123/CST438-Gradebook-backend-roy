@@ -4,6 +4,6 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface EnrollmentRepository extends CrudRepository <Enrollment, Integer> {
 	
-	boolean existsByCourseAndStudent(Course course, String studentEmail);
+	boolean existsByCourseAndStudentEmail(Course course, String studentEmail);
 
 }
