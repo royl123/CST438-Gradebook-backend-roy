@@ -24,7 +24,7 @@ public class RegistrationServiceREST extends RegistrationService {
 	@Override
 	public void sendFinalGrades(int course_id , CourseDTOG courseDTO) { 
 		
-		String url = registration_url + "/grades/{course_id}";
+		String url = registration_url + "/course/" + course_id;
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -32,7 +32,7 @@ public class RegistrationServiceREST extends RegistrationService {
         HttpEntity<CourseDTOG> requestEntity = new HttpEntity<>(courseDTO, headers);
 
         try {
-            restTemplate.put(url, requestEntity, course_id);
+            restTemplate.put(url, requestEntity, CourseDTOG.class);
             System.out.println("Final grades sent to Registration backend for course_id: " + course_id);
         } catch (RestClientException e) {
             System.out.println("Failed to send final grades to Registration backend for course_id: " + course_id);
