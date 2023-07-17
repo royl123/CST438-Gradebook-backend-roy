@@ -59,9 +59,15 @@ public class RegistrationServiceMQ extends RegistrationService {
 	// sender of messages to Registration Service
 	@Override
 	public void sendFinalGrades(int course_id, CourseDTOG courseDTO) {
-		 
-		rabbitTemplate.convertAndSend(registrationQueue.getName(), courseDTO);
-		
+	    String routingKey = "registration-queue";
+
+	    try {
+	        rabbitTemplate.convertAndSend(routingKey, courseDTO);
+	        System.out.println("Final grades sent to Registration backend for course_id: " + course_id);
+	    } catch (Exception e) {
+	        System.out.println("Failed to send final grades to Registration backend for course_id: " + course_id);
+	        e.printStackTrace();
+	    }
 	}
 
 }
